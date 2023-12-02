@@ -1,0 +1,51 @@
+.dash {
+  position: absolute;
+  background-color:rgb(77, 77, 77);
+  height: 5px;
+  width: 40px;
+  border-radius: 5px;
+}
+
+.circleAnimPart1 {
+  animation: circleP1 0.5s ease-in-out forwards;
+}
+
+.circleAnimPart2 {
+  animation: circleP2 0.5s ease-in-out forwards;
+}
+
+@keyframes circleP1 {
+  to {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@keyframes circleP2 {
+  to {
+    background-color: aquamarine;
+    border-radius: 50%;
+    height: 45px;
+    width: 45px;
+  }
+}
+
+.crossAnimPart1 {
+  animation: crossP1 0.1s ease-in-out forwards;
+}
+.crossAnimPart2 {
+  animation: crossP2 0.1s ease-in-out forwards;
+}
+
+@keyframes crossP1 {
+  to {
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes crossP2 {
+  to {
+    transform: rotate(-45deg);
+  }
+}
