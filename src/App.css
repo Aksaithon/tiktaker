@@ -32,8 +32,8 @@ h1{
   align-content: center;
 
   gap: 10px;
-  width: 400px;
-  height: 400px;
+  width: 404px;
+  height: 404px;
 }
 
 .box {
@@ -47,7 +47,7 @@ h1{
   height: 120px;
   width: 120px;
 
-  border: 2px solid darkcyan;
+  border: 4px solid darkcyan;
   border-radius: 10px;
 }
 

@@ -240,6 +240,7 @@ const App = () => {
             symbol == compSymb ? "Computer" : "😱You"
           } won!!`;
           document.getElementsByTagName("button")[0].textContent = "Restart";
+          setStartGame(false);
         }
 
         break;
@@ -273,8 +274,12 @@ const App = () => {
                       .getElementsByTagName("h1")[1]
                       .textContent?.includes("TIE")
                   ? (document.getElementsByTagName("h1")[1].textContent =
-                      "Its TIE🤭 pls restart")
-                  : "";
+                      "pls restart 🤭 ")
+                  : document
+                      .getElementsByTagName("h1")[1]
+                      .textContent?.includes("won!!")
+                  ? alert("Restart bro")
+                  : alert("Select symbol");
               }}
             >
               <Symbols thisAnim={whichAnim[id]} />

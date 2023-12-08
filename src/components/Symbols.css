@@ -1,17 +1,17 @@
 .dash {
   position: absolute;
-  background-color:rgb(77, 77, 77);
+  background-color:rgb(0, 83, 85);
   height: 5px;
   width: 40px;
   border-radius: 5px;
 }
 
 .circleAnimPart1 {
-  animation: circleP1 0.5s ease-in-out forwards;
+  animation: circleP1 0.3s cubic-bezier(0.45, 1.45, 0.02, 2.17) forwards;
 }
 
 .circleAnimPart2 {
-  animation: circleP2 0.5s ease-in-out forwards;
+  animation: circleP2 0.3s cubic-bezier(0.45, 1.45, 0.02, 2.17) forwards;
 }
 
 @keyframes circleP1 {
@@ -32,10 +32,10 @@
 }
 
 .crossAnimPart1 {
-  animation: crossP1 0.1s ease-in-out forwards;
+  animation: crossP1 0.3s cubic-bezier(0.45, 1.45, 0.02, 2.17) forwards;
 }
 .crossAnimPart2 {
-  animation: crossP2 0.1s ease-in-out forwards;
+  animation: crossP2 0.3s cubic-bezier(0.45, 1.45, 0.02, 2.17) forwards;
 }
 
 @keyframes crossP1 {
