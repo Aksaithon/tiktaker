@@ -8,28 +8,28 @@ interface SectionProps {
   myComponentProp: ComponentProp; // all props to pass it.
 }
 
-const Section: React.FC<SectionProps> = ({ myFuncProp, myComponentProp }) => {
+const SelectSymbol: React.FC<SectionProps> = ({ myFuncProp, myComponentProp }) => {
   return (
     <section>
       <h2>Select</h2>
       <button
-        className="boxBtn"
-        onClick={(e) => {
-          myFuncProp(e.currentTarget.textContent);
+        className="selectBtn"
+        onClick={() => {
+          myFuncProp('X');
         }}
       >
-        {myComponentProp({thisAnim: 'X'})}X
+        {myComponentProp({thisAnim: 'X'})}
       </button>
       <button
-        className="boxBtn"
-        onClick={(e) => {
-          myFuncProp(e.currentTarget.textContent);
+        className="selectBtn"
+        onClick={() => {
+          myFuncProp('O');
         }}
       >
-        {myComponentProp({thisAnim: 'O'})}O
+        {myComponentProp({thisAnim: 'O'})}
       </button>
     </section>
   );
 };
 
-export default Section;
+export default SelectSymbol;

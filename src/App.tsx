@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Symbols from "./components/Symbols";
-import Section from "./Section";
+import SelectSymbol from "./Section";
 
 let winner = false;
 
@@ -40,13 +40,13 @@ const App = () => {
   const [userSymb, setUserSymb] = useState<any>();
   const [compSymb, setCompSymb] = useState<any>();
 
-  const [showSection, setShowSection] = useState(true);
+  const [showSelectSymbol, setShowSelectSymbol] = useState(true);
 
   const selectSymbol = (symbol: any) => {
     setUserSymb(symbol);
     setCompSymb(symbol == "X" ? "O" : "X");
 
-    setShowSection(false);
+    setShowSelectSymbol(false);
 
     setStartGame(true);
 
@@ -64,7 +64,7 @@ const App = () => {
     }
     setWhichAnim(newWhichAnim);
 
-    document.getElementsByTagName("h1")[1].textContent = "";
+    document.getElementsByTagName("h1")[0].textContent = "";
 
     setStartGame(true);
     setTotalMoves(0);
@@ -156,7 +156,7 @@ const App = () => {
     return pos;
   };
 
-  // COmputer BRAIN-----------------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------------------------
 
   const makeCompMove = (compAnim: any, usrAnim: any) => {
     const decision1: any = findWinMov(compAnim);
@@ -178,29 +178,30 @@ const App = () => {
           : decision2
         : decision1;
 
-    wrapperFunction(position, compAnim);
+    makeUserMove(position, compAnim);
 
     // setTimeout(() => {
     // }, 950);
   };
 
   // Computer move run by this useEffect hook----------------------------------------------------------------
-  useEffect(() => {
-    if (totalMoves % 2 !== 0 && !winner) {
-      makeCompMove(compSymb, userSymb);
-    }
+  if (true) {
+    useEffect(() => {
+      if (totalMoves % 2 !== 0 && !winner) {
+        makeCompMove(compSymb, userSymb);
+      }
 
-    if (!notFull()) {
-      document.getElementsByTagName("h1")[1].textContent = "Its a TIE😞";
-      document.getElementsByClassName("btn")[0].textContent = "Restart";
-      setStartGame(false);
-    }
+      if (!notFull()) {
+        document.getElementsByTagName("h1")[0].textContent = "Its a TIE😞";
+        setStartGame(false);
+      }
 
-    checkWinner(whichAnim, compSymb, true);
-    checkWinner(whichAnim, userSymb, true);
-  }, [whichAnim]);
+      checkWinner(whichAnim, compSymb, true);
+      checkWinner(whichAnim, userSymb, true);
+    }, [whichAnim]);
+  }
 
-  const wrapperFunction = (position: string, anim: any) => {
+  const makeUserMove = (position: string, anim: any) => {
     setWhichAnim((prevWhichAnim) => {
       if (prevWhichAnim[position] === "") {
         const newWhichAnim = { ...prevWhichAnim };
@@ -236,10 +237,11 @@ const App = () => {
         winner = true;
 
         if (declareWinner) {
-          document.getElementsByTagName("h1")[1].textContent = `${
+          document.getElementsByTagName("h1")[0].textContent = `${
             symbol == compSymb ? "Computer" : "😱You"
           } won!!`;
-          document.getElementsByTagName("button")[0].textContent = "Restart";
+          document.getElementsByClassName("restartBtn")[0].textContent =
+            "Restart";
           setStartGame(false);
         }
 
@@ -252,48 +254,56 @@ const App = () => {
 
   return (
     <>
-      <header className="logo">
-        <h1>TIC-TAC-TOE!</h1>
-        <h1></h1>
+      <div className="game">
+        <header className="logo">
+          <h1></h1>
 
-        {showSection && (
-          <Section myFuncProp={selectSymbol} myComponentProp={Symbols} />
-        )}
-      </header>
-      <div className="main-game">
-        <div className="game-board">
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((id) => (
-            <div
-              key={id}
-              className="box"
-              id={id.toString()}
-              onClick={(e) => {
-                startGame
-                  ? wrapperFunction(e.currentTarget.id, userSymb)
-                  : document
-                      .getElementsByTagName("h1")[1]
-                      .textContent?.includes("TIE")
-                  ? (document.getElementsByTagName("h1")[1].textContent =
-                      "pls restart 🤭 ")
-                  : document
-                      .getElementsByTagName("h1")[1]
-                      .textContent?.includes("won!!")
-                  ? alert("Restart bro")
-                  : alert("Select symbol");
-              }}
-            >
-              <Symbols thisAnim={whichAnim[id]} />
-            </div>
-          ))}
+          {showSelectSymbol && (
+            <SelectSymbol myFuncProp={selectSymbol} myComponentProp={Symbols} />
+          )}
+        </header>
+        <div className="main-game">
+          {/* game blocks */}
+          <div className="game-board">
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((id) => (
+              <div
+                key={id}
+                className="blocks"
+                id={id.toString()}
+                onClick={(e) => {
+                  startGame
+                    ? makeUserMove(e.currentTarget.id, userSymb)
+                    : document
+                        .getElementsByTagName("h1")[0]
+                        .textContent?.includes("TIE")
+                    ? (document.getElementsByTagName("h1")[0].textContent =
+                        "pls restart 🤭 ")
+                    : document
+                        .getElementsByTagName("h1")[0]
+                        .textContent?.includes("won!!") ||
+                      document
+                        .getElementsByTagName("h1")[0]
+                        .textContent?.includes("restart")
+                    ? (document.getElementsByTagName("h1")[0].textContent =
+                        "pls restart 🤭 ")
+                    : alert("Select symbol");
+                }}
+              >
+                <Symbols thisAnim={whichAnim[id]} />
+              </div>
+            ))}
+          </div>
+
+          {/* restart button */}
           {totalMoves > 0 && (
-            <button
-              className="btn"
+            <div
+              className="restartBtn"
               onClick={() => {
                 restartGame();
               }}
             >
               Restart
-            </button>
+            </div>
           )}
         </div>
       </div>
