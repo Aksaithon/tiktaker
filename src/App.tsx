@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Symbols from "./components/Symbols";
-import SelectSymbol from "./Section";
+// import SelectSymbol from "./Section";
+
+const user = Math.random() >= 0.6 ? "X" : "O";
+const comp = user == "X" ? "O" : "X";
 
 let winner = false;
-
 const App = () => {
-  const [startGame, setStartGame] = useState<boolean>(false);
+  const [startGame, setStartGame] = useState<boolean>(true);
+
+  const [onePlyr, setOnePlyr] = useState<boolean>(false);
+  const [twoPlyr, setTwoPlyr] = useState<boolean>(false);
+
+  const [curntSymb, setCurntSymb] = useState<string>(user);
 
   const [whichAnim, setWhichAnim] = useState<{ [key: string]: string }>({
     0: "",
@@ -34,28 +41,29 @@ const App = () => {
   const [totalMoves, setTotalMoves] = useState<number>(0);
 
   const notFull = () => {
-    return totalMoves < 8;
+    return totalMoves < 9;
   };
 
-  const [userSymb, setUserSymb] = useState<any>();
-  const [compSymb, setCompSymb] = useState<any>();
+  // const [userSymb, setUserSymb] = useState<any>();
+  // const [compSymb, setCompSymb] = useState<any>();
 
-  const [showSelectSymbol, setShowSelectSymbol] = useState(true);
+  // const [showSelectSymbol, setShowSelectSymbol] = useState(true);
 
-  const selectSymbol = (symbol: any) => {
-    setUserSymb(symbol);
-    setCompSymb(symbol == "X" ? "O" : "X");
+  // const selectSymbol = (symbol: any) => {
+  //   setUserSymb(symbol);
+  //   setCompSymb(symbol == "X" ? "O" : "X");
 
-    setShowSelectSymbol(false);
+  //   setShowSelectSymbol(false);
 
-    setStartGame(true);
+  //   setStartGame(true);
 
-    // here m setting btn values dynamically while assigning dom element a new value  🔥🔥🔥
-    // const btn = (document.getElementsByClassName("btn")[0].textContent =
-    //   "Play!");
-  };
+  //   // here m setting btn values dynamically while assigning dom element a new value  🔥🔥🔥
+  //   // const btn = (document.getElementsByClassName("btn")[0].textContent =
+  //   //   "Play!");
+  // };
 
   const restartGame = () => {
+    winner = false;
     const newWhichAnim = { ...whichAnim };
     for (const key in whichAnim) {
       if (Object.prototype.hasOwnProperty.call(whichAnim, key)) {
@@ -79,6 +87,8 @@ const App = () => {
         if (whichAnim[key] == "") {
           const newWhichAnim = { ...whichAnim };
           newWhichAnim[key] = compAnim;
+
+          console.log("from here : ");
 
           checkWinner(newWhichAnim, compAnim, false);
 
@@ -178,40 +188,49 @@ const App = () => {
           : decision2
         : decision1;
 
-    makeUserMove(position, compAnim);
+    makeMove(position, compAnim);
 
     // setTimeout(() => {
     // }, 950);
   };
 
   // Computer move run by this useEffect hook----------------------------------------------------------------
-  if (true) {
-    useEffect(() => {
-      if (totalMoves % 2 !== 0 && !winner) {
-        makeCompMove(compSymb, userSymb);
-      }
 
-      if (!notFull()) {
-        document.getElementsByTagName("h1")[0].textContent = "Its a TIE😞";
-        setStartGame(false);
-      }
+  useEffect(() => {
+    checkWinner(whichAnim, comp, true);
+    checkWinner(whichAnim, user, true);
 
-      checkWinner(whichAnim, compSymb, true);
-      checkWinner(whichAnim, userSymb, true);
-    }, [whichAnim]);
-  }
+    if (totalMoves % 2 !== 0 && !winner && onePlyr) {
+      makeCompMove(comp, user);
+    }
 
-  const makeUserMove = (position: string, anim: any) => {
+    if (twoPlyr) {
+      document.getElementsByTagName("h1")[0].textContent = curntSymb;
+    }
+
+    if (!notFull()) {
+      document.getElementsByTagName("h1")[0].textContent = "Its a TIE😞";
+      setStartGame(false);
+    }
+  }, [whichAnim]);
+
+  const makeMove = (position: string, anim: any) => {
     setWhichAnim((prevWhichAnim) => {
       if (prevWhichAnim[position] === "") {
         const newWhichAnim = { ...prevWhichAnim };
         newWhichAnim[position] = anim;
 
         // Check for the winner based on the most recent move
-        checkWinner(newWhichAnim, anim, false);
+        // checkWinner(newWhichAnim, anim, true);
+
+        // checkWinner(whichAnim, anim, false)
+        // checkWinner(whichAnim, comp, true);
+        // checkWinner(whichAnim, user, true);
 
         // Update state for the next rendering
         setTotalMoves(totalMoves + 1);
+
+        setCurntSymb(curntSymb == "X" ? "O" : "X");
 
         return newWhichAnim;
       }
@@ -236,12 +255,21 @@ const App = () => {
       ) {
         winner = true;
 
+        console.log(combo);
+        console.log(currentWhichAnim);
+
+        console.log("won", symbol, winner);
+
         if (declareWinner) {
-          document.getElementsByTagName("h1")[0].textContent = `${
-            symbol == compSymb ? "Computer" : "😱You"
-          } won!!`;
-          document.getElementsByClassName("restartBtn")[0].textContent =
-            "Restart";
+          if (onePlyr) {
+            document.getElementsByTagName("h1")[0].textContent = `${
+              symbol == comp ? "Computer" : "😱You"
+            } won!`;
+          } else {
+            document.getElementsByTagName("h1")[0].textContent = `😎${
+              curntSymb == "X" ? "O" : "X"
+            } won!`;
+          }
           setStartGame(false);
         }
 
@@ -254,13 +282,30 @@ const App = () => {
 
   return (
     <>
+      <button
+        onClick={() => {
+          setOnePlyr(true);
+          setTwoPlyr(false);
+        }}
+      >
+        1
+      </button>
+      <button
+        onClick={() => {
+          setTwoPlyr(true);
+          setOnePlyr(false);
+        }}
+      >
+        2
+      </button>
       <div className="game">
         <header className="logo">
-          <h1></h1>
+          <h1>{twoPlyr ? curntSymb : ""}</h1>
 
+          {/* 
           {showSelectSymbol && (
             <SelectSymbol myFuncProp={selectSymbol} myComponentProp={Symbols} />
-          )}
+          )} */}
         </header>
         <div className="main-game">
           {/* game blocks */}
@@ -272,7 +317,7 @@ const App = () => {
                 id={id.toString()}
                 onClick={(e) => {
                   startGame
-                    ? makeUserMove(e.currentTarget.id, userSymb)
+                    ? makeMove(e.currentTarget.id, onePlyr ? user : curntSymb)
                     : document
                         .getElementsByTagName("h1")[0]
                         .textContent?.includes("TIE")
@@ -280,7 +325,7 @@ const App = () => {
                         "pls restart 🤭 ")
                     : document
                         .getElementsByTagName("h1")[0]
-                        .textContent?.includes("won!!") ||
+                        .textContent?.includes("won!") ||
                       document
                         .getElementsByTagName("h1")[0]
                         .textContent?.includes("restart")
