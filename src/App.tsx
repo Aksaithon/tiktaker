@@ -197,23 +197,23 @@ const App = () => {
   // Computer move run by this useEffect hook----------------------------------------------------------------
 
   useEffect(() => {
-    checkWinner(whichAnim, comp, true);
-    checkWinner(whichAnim, user, true);
-
+    
     if (totalMoves % 2 !== 0 && !winner && onePlyr) {
       makeCompMove(comp, user);
     }
-
-    if (twoPlyr) {
+    
+    if (twoPlyr && !winner) {
       document.getElementsByTagName("h1")[0].textContent = curntSymb;
     }
-
+    
     if (!notFull()) {
       document.getElementsByTagName("h1")[0].textContent = "Its a TIE😞";
       setStartGame(false);
     }
+    checkWinner(whichAnim, comp, true);
+    checkWinner(whichAnim, user, true);
   }, [whichAnim]);
-
+  
   const makeMove = (position: string, anim: any) => {
     setWhichAnim((prevWhichAnim) => {
       if (prevWhichAnim[position] === "") {
@@ -221,11 +221,11 @@ const App = () => {
         newWhichAnim[position] = anim;
 
         // Check for the winner based on the most recent move
-        // checkWinner(newWhichAnim, anim, true);
+        checkWinner(newWhichAnim, anim, true);
 
         // checkWinner(whichAnim, anim, false)
-        // checkWinner(whichAnim, comp, true);
-        // checkWinner(whichAnim, user, true);
+        // checkWinner(newWhichAnim, comp, true);
+        // checkWinner(newWhichAnim, user, true);
 
         // Update state for the next rendering
         setTotalMoves(totalMoves + 1);
