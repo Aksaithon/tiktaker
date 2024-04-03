@@ -1,0 +1,19 @@
+/* *{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+
+} */
+
+#root{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    /* position: relative; */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+}

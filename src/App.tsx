@@ -197,15 +197,14 @@ const App = () => {
   // Computer move run by this useEffect hook----------------------------------------------------------------
 
   useEffect(() => {
-    
     if (totalMoves % 2 !== 0 && !winner && onePlyr) {
       makeCompMove(comp, user);
     }
-    
+
     if (twoPlyr && !winner) {
       document.getElementsByTagName("h1")[0].textContent = curntSymb;
     }
-    
+
     if (!notFull()) {
       document.getElementsByTagName("h1")[0].textContent = "Its a TIE😞";
       setStartGame(false);
@@ -213,7 +212,7 @@ const App = () => {
     checkWinner(whichAnim, comp, true);
     checkWinner(whichAnim, user, true);
   }, [whichAnim]);
-  
+
   const makeMove = (position: string, anim: any) => {
     setWhichAnim((prevWhichAnim) => {
       if (prevWhichAnim[position] === "") {
@@ -282,32 +281,76 @@ const App = () => {
 
   return (
     <>
-      <button
-        onClick={() => {
-          setOnePlyr(true);
-          setTwoPlyr(false);
-        }}
-      >
-        1
-      </button>
-      <button
-        onClick={() => {
-          setTwoPlyr(true);
-          setOnePlyr(false);
-        }}
-      >
-        2
-      </button>
-      <div className="game">
-        <header className="logo">
-          <h1>{twoPlyr ? curntSymb : ""}</h1>
+      <div className="select_game_type_Btn_Container">
+        <div
+          className={
+            onePlyr
+              ? "select_game_type_Btn vs_comp opacity_with_delay_and_scale "
+              : twoPlyr
+              ? " select_game_type_Btn vs_comp only_opacity"
+              : "select_game_type_Btn vs_comp"
+          }
+          onClick={() => {
+            setOnePlyr(true);
+            setTwoPlyr(false);
+          }}
+        >
+          <div className="comp_icon">
+            <img
+              src="User_Computer_Icons/CompIcon.svg"
+              style={{ width: "24px", height: "24px" }}
+              alt=""
+            />
+          </div>
+          <div className="vs">VS</div>
+          <div className="user_icon1">
+            <img
+              src="User_Computer_Icons/UserIcon1.svg"
+              style={{ width: "24px", height: "24px" }}
+              alt=""
+            />
+          </div>
+        </div>
+        <div
+          className={
+            twoPlyr
+              ? "select_game_type_Btn vs_user opacity_with_delay_and_scale "
+              : onePlyr
+              ? " select_game_type_Btn vs_user only_opacity"
+              : "select_game_type_Btn vs_user"
+          }
+          onClick={() => {
+            setTwoPlyr(true);
+            setOnePlyr(false);
+          }}
+        >
+          <div className="user_icon2">
+            <img
+              src="User_Computer_Icons/UserIcon2.svg"
+              style={{ width: "24px", height: "24px" }}
+              alt=""
+            />
+          </div>
+          <div className="vs">VS</div>
+          <div className="user_icon1">
+            <img
+              src="User_Computer_Icons/UserIcon1.svg"
+              style={{ width: "24px", height: "24px" }}
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+      <div className={twoPlyr || onePlyr ? "game comeHere_game " : "game"}>
+        {/* <header className="logo">
 
-          {/* 
+          
           {showSelectSymbol && (
             <SelectSymbol myFuncProp={selectSymbol} myComponentProp={Symbols} />
-          )} */}
-        </header>
-        <div className="main-game">
+          )}
+        </header> */}
+        <div className={"main-game"}>
+          <h1></h1>
           {/* game blocks */}
           <div className="game-board">
             {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((id) => (
@@ -339,17 +382,33 @@ const App = () => {
             ))}
           </div>
 
-          {/* restart button */}
-          {totalMoves > 0 && (
+          <div className="restartBtn_and_toggle_gameModeBtn_CONTAINER">
             <div
-              className="restartBtn"
+              className={
+                !onePlyr && !twoPlyr
+                  ? "toggle_gameModeBtn only_opacity"
+                  : "toggle_gameModeBtn"
+              }
               onClick={() => {
+                setOnePlyr(false);
+                setTwoPlyr(false);
                 restartGame();
               }}
             >
-              Restart
+              change mode
             </div>
-          )}
+            {/* restart button */}
+            {totalMoves > 0 && (
+              <div
+                className="restartBtn"
+                onClick={() => {
+                  restartGame();
+                }}
+              >
+                Restart
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
